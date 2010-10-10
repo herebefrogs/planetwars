@@ -145,8 +145,15 @@ public class PlanetWars {
 	//   * the ships will take a few turns to reach their destination. Travel
 	//     is not instant. See the Distance() function for more info.
 	public void issueOrder(int sourcePlanet, int destinationPlanet,	int numShips) {
-		System.out.println("" + sourcePlanet + " " + destinationPlanet + " " +	numShips);
-		System.out.flush();
+		Planet source = getPlanet(sourcePlanet);
+		if (source.owner != 1) {
+			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": source planet is owned by " + source.owner);
+		} else if (source.numShips < numShips) {
+			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": source planet only have " + source.numShips + " ships");
+		} else {
+			System.out.println("" + sourcePlanet + " " + destinationPlanet + " " +	numShips);
+			System.out.flush();
+		}
 	}
 
 	// Sends an order to the game engine. An order is composed of a source
