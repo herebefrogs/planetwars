@@ -1,4 +1,3 @@
-import java.util.*;
 
 public class MyBot {
     // The DoTurn function is where your code goes. The PlanetWars object
