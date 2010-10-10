@@ -1,11 +1,6 @@
 public class Planet implements Cloneable {
 	// Initializes a planet.
-	public Planet(int planetID,
-			int owner,
-			int numShips,
-			int growthRate,
-			double x,
-			double y) {
+	public Planet(int planetID, int owner, int numShips, int growthRate, double x, double y) {
 		this.planetID = planetID;
 		this.owner = owner;
 		this.numShips = numShips;
@@ -14,53 +9,27 @@ public class Planet implements Cloneable {
 		this.y = y;
 	}
 
-	// Accessors and simple modification functions. These should be mostly
-	// self-explanatory.
-	public int PlanetID() {
-		return planetID;
-	}
-
-	public int Owner() {
-		return owner;
-	}
-
-	public int NumShips() {
-		return numShips;
-	}
-
-	public int GrowthRate() {
-		return growthRate;
-	}
-
-	public double X() {
-		return x;
-	}
-
-	public double Y() {
-		return y;
-	}
-
-	public void Owner(int newOwner) {
+	public void setOwner(int newOwner) {
 		this.owner = newOwner;
 	}
 
-	public void NumShips(int newNumShips) {
+	public void setNumShips(int newNumShips) {
 		this.numShips = newNumShips;
 	}
 
-	public void AddShips(int amount) {
+	public void addShips(int amount) {
 		numShips += amount;
 	}
 
-	public void RemoveShips(int amount) {
+	public void removeShips(int amount) {
 		numShips -= amount;
 	}
 
-	private int planetID;
-	private int owner;
-	private int numShips;
-	private int growthRate;
-	private double x, y;
+	public int planetID;
+	public int owner;
+	public int numShips;
+	public int growthRate;
+	public double x, y;
 
 	private Planet (Planet _p) {
 		planetID = _p.planetID;

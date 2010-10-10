@@ -1,11 +1,6 @@
-public class Fleet implements Comparable, Cloneable {
+public class Fleet implements Comparable<Fleet>, Cloneable {
 	// Initializes a fleet.
-	public Fleet(int owner,
-			int numShips,
-			int sourcePlanet,
-			int destinationPlanet,
-			int totalTripLength,
-			int turnsRemaining) {
+	public Fleet(int owner, int numShips, int sourcePlanet, int destinationPlanet, int totalTripLength,	int turnsRemaining) {
 		this.owner = owner;
 		this.numShips = numShips;
 		this.sourcePlanet = sourcePlanet;
@@ -15,8 +10,7 @@ public class Fleet implements Comparable, Cloneable {
 	}
 
 	// Initializes a fleet.
-	public Fleet(int owner,
-			int numShips) {
+	public Fleet(int owner, int numShips) {
 		this.owner = owner;
 		this.numShips = numShips;
 		this.sourcePlanet = -1;
@@ -25,39 +19,13 @@ public class Fleet implements Comparable, Cloneable {
 		this.turnsRemaining = -1;
 	}
 
-	// Accessors and simple modification functions. These should be mostly
-	// self-explanatory.
-	public int Owner() {
-		return owner;
-	}
-
-	public int NumShips() {
-		return numShips;
-	}
-
-	public int SourcePlanet() {
-		return sourcePlanet;
-	}
-
-	public int DestinationPlanet() {
-		return destinationPlanet;
-	}
-
-	public int TotalTripLength() {
-		return totalTripLength;
-	}
-
-	public int TurnsRemaining() {
-		return turnsRemaining;
-	}
-
-	public void RemoveShips(int amount) {
+	public void removeShips(int amount) {
 		numShips -= amount;
 	}
 
 	// Subtracts one turn remaining. Call this function to make the fleet get
 	// one turn closer to its destination.
-	public void TimeStep() {
+	public void timeStep() {
 		if (turnsRemaining > 0) {
 			--turnsRemaining;
 		} else {
@@ -66,17 +34,17 @@ public class Fleet implements Comparable, Cloneable {
 	}
 
 	@Override
-	public int compareTo(Object o) {
-		Fleet f = (Fleet)o;
+	public int compareTo(Fleet o) {
+		Fleet f = o;
 		return this.numShips - f.numShips;
 	}
 
-	private int owner;
-	private int numShips;
-	private int sourcePlanet;
-	private int destinationPlanet;
-	private int totalTripLength;
-	private int turnsRemaining;
+	public int owner;
+	public int numShips;
+	public int sourcePlanet;
+	public int destinationPlanet;
+	public int totalTripLength;
+	public int turnsRemaining;
 
 	private Fleet(Fleet _f) {
 		owner = _f.owner;
