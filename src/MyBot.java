@@ -1,5 +1,7 @@
+import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 
 public class MyBot {
@@ -81,36 +83,29 @@ public class MyBot {
 	public static void main(String[] args) {
 		openDebugLog(args);
 
-		String line = "";
+		String line = null;
 		String message = "";
-		int c;
 		int turn = 1;
 		try {
-			while ((c = System.in.read()) >= 0) {
-				switch (c) {
-					case '\n':
-						if (line.equals("go")) {
-							log("Turn " + turn++);
-							long t = System.currentTimeMillis();
+			BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 
-							PlanetWars pw = new PlanetWars(message);
+			while ((line = r.readLine()) != null) {
+				if (line.equals("go")) {
+					log("Turn " + turn++);
+					long t = System.currentTimeMillis();
 
-							log("parsed game data in " + (System.currentTimeMillis() - t) + "ms");
-							t = System.currentTimeMillis();
+					PlanetWars pw = new PlanetWars(message);
 
-							doTurn(pw);
+					log("parsed game data in " + (System.currentTimeMillis() - t) + "ms");
+					t = System.currentTimeMillis();
 
-							log("issued orders in " + (System.currentTimeMillis() - t) + "ms");
-							pw.finishTurn();
-							message = "";
-						} else {
-							message += line + "\n";
-						}
-						line = "";
-						break;
-					default:
-						line += (char)c;
-						break;
+					doTurn(pw);
+
+					log("issued orders in " + (System.currentTimeMillis() - t) + "ms");
+					pw.finishTurn();
+					message = "";
+				} else {
+					message += line + "\n";
 				}
 			}
 		} catch (Exception e) {
