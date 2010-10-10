@@ -44,4 +44,9 @@ public class Planet implements Cloneable {
 	public Object clone() {
 		return new Planet(this);
 	}
+
+	@Override
+	public String toString() {
+		return "P " + x + " " + y  + " " + owner + " " + numShips + " " + growthRate + " #" + planetID;
+	}
 }

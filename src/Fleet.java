@@ -58,4 +58,9 @@ public class Fleet implements Comparable<Fleet>, Cloneable {
 	public Object clone() {
 		return new Fleet(this);
 	}
+
+	@Override
+	public String toString() {
+		return "F " + owner + " " + numShips + " " + sourcePlanet + " " + destinationPlanet + " " + totalTripLength + " " + turnsRemaining;
+	}
 }

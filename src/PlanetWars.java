@@ -256,6 +256,7 @@ public class PlanetWars {
 				int growthRate = Integer.parseInt(tokens[5]);
 				Planet p = new Planet(planetID++, owner, numShips, growthRate, x, y);
 				planets.add(p);
+				MyBot.log(p.toString());
 			} else if (tokens[0].equals("F")) {
 				if (tokens.length != 7) {
 					return 0;
@@ -268,6 +269,7 @@ public class PlanetWars {
 				int turnsRemaining = Integer.parseInt(tokens[6]);
 				Fleet f = new Fleet(owner, numShips, source, destination, totalTripLength, turnsRemaining);
 				fleets.add(f);
+				MyBot.log(f.toString());
 			} else {
 				return 0;
 			}

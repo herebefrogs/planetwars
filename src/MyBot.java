@@ -1,5 +1,12 @@
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public class MyBot {
+	/**
+	 * Log file for game state and orders in debug mode
+	 */
+	private static FileWriter debugLog = null;
 
 	public static void doTurn(PlanetWars pw) {
 		// (1) If we currently have a fleet in flight, just do nothing.
@@ -34,17 +41,66 @@ public class MyBot {
 		}
 	}
 
+	/**
+	 * Open log file in debug mode
+	 */
+	private static void openDebugLog(String[] args) {
+		for (int i = 0; i < args.length; i++) {
+			if ((args[i].equals("--debug") || args[i].equals("-d"))) {
+				try {
+					debugLog = new FileWriter("build/debugLog.txt");
+				} catch (IOException ioe) {
+				}
+			}
+		}
+	}
+
+	/**
+	 * Close log file in debug mode
+	 */
+	private static void closeDebugLog() {
+		if (debugLog != null) {
+			try {
+				debugLog.flush();
+				debugLog.close();
+			} catch (IOException ioe) {
+			}
+			debugLog = null;
+		}
+	}
+
+	public static void log(String s) {
+		if (debugLog != null) {
+			try {
+				debugLog.write(s + "\n");
+			} catch (IOException e) {
+			}
+		}
+	}
+
 	public static void main(String[] args) {
+		openDebugLog(args);
+
 		String line = "";
 		String message = "";
 		int c;
+		int turn = 1;
 		try {
 			while ((c = System.in.read()) >= 0) {
 				switch (c) {
 					case '\n':
 						if (line.equals("go")) {
+							log("Turn " + turn++);
+							long t = System.currentTimeMillis();
+
 							PlanetWars pw = new PlanetWars(message);
+
+							log("parsed game data in " + (System.currentTimeMillis() - t) + "ms");
+							t = System.currentTimeMillis();
+
 							doTurn(pw);
+
+							log("issued orders in " + (System.currentTimeMillis() - t) + "ms");
 							pw.finishTurn();
 							message = "";
 						} else {
@@ -58,7 +114,12 @@ public class MyBot {
 				}
 			}
 		} catch (Exception e) {
-			// Owned.
+			log(e.toString());
+			for (StackTraceElement s : e.getStackTrace()) {
+				log(s.toString());
+			}
+		} finally {
+			closeDebugLog();
 		}
 	}
 }

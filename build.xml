@@ -36,7 +36,7 @@
 		<delete file="**/log.txt" />
 
 		<exec executable="java" outputproperty="show.game" errorproperty="winner">
-			<arg line="-jar lib/PlayGame.jar maps/${map} 1000 ${turns} build/log.txt 'java -jar ${player1}' 'java -jar ${player2}'" />
+			<arg line="-jar lib/PlayGame.jar maps/${map} 1000 ${turns} build/log.txt 'java -jar ${player1} -d' 'java -jar ${player2}'" />
 		</exec>
 		
 		<echo>${winner}</echo>
