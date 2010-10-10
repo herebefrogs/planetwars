@@ -1,0 +1,48 @@
+<project name="planetwar" default="run">
+
+	<property name="file" value="lefrog" />
+	<property name="map" value="map76.txt" />
+	<property name="player1" value="build/${file}.jar" />
+	<property name="player2" value="lib/example_bots/BullyBot.jar" />
+	<property name="turns" value="199" />
+	
+	
+    <target name="submit" description="Create a ZIP file to submit my bot">
+		<mkdir dir="build" />
+		<delete dir="bin" includes="*.zip"/>
+
+    	<zip destfile="build/${file}.zip"
+    		 basedir="src" />
+    </target>
+
+	<target name="compile" description="Create a JAR file to run my bot">
+		<mkdir dir="bin" />
+		<delete dir="bin" includes="*.java"/>
+
+		<javac srcdir="src" destdir="bin" includes="*.java" />
+
+		<mkdir dir="build" />
+		<delete dir="bin" includes="*.jar"/>
+
+		<jar destfile="build/${file}.jar"
+			 basedir="bin">
+			<manifest>
+				<attribute name="Main-Class" value="MyBot" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="run" description="Run my bot" depends="compile">
+		<delete file="**/log.txt" />
+
+		<exec executable="java" outputproperty="show.game" errorproperty="winner">
+			<arg line="-jar lib/PlayGame.jar maps/${map} 1000 ${turns} build/log.txt 'java -jar ${player1}' 'java -jar ${player2}'" />
+		</exec>
+		
+		<echo>${winner}</echo>
+
+		<exec executable="java" inputstring="${show.game}">
+			<arg line="-jar lib/ShowGame.jar" />
+		</exec>
+	</target>
+</project>
