@@ -9,12 +9,20 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class PlanetWars {
+	/**
+	 * Store all distances between planets (1st index is source ID, 2nd index is destination ID)
+	 */
+	private static int[][] distances;
+
 	// Constructs a PlanetWars object instance, given a string containing a
 	// description of a game state.
 	public PlanetWars(String gameStateString) {
 		planets = new ArrayList<Planet>();
 		fleets = new ArrayList<Fleet>();
 		parseGameState(gameStateString);
+		if (distances == null) {
+			initDistances();
+		}
 	}
 
 	// Returns the number of planets. Planets are numbered starting with 0.
@@ -123,15 +131,14 @@ public class PlanetWars {
 		return r;
 	}
 
-	// Returns the distance between two planets, rounded up to the next highest
-	// integer. This is the number of discrete time steps it takes to get
-	// between the two planets.
+	/**
+	 * Returns the distance between two planets
+	 * @param sourcePlanet
+	 * @param destinationPlanet
+	 * @return
+	 */
 	public int getDistance(int sourcePlanet, int destinationPlanet) {
-		Planet source = planets.get(sourcePlanet);
-		Planet destination = planets.get(destinationPlanet);
-		double dx = source.x - destination.x;
-		double dy = source.y - destination.y;
-		return (int)Math.ceil(Math.sqrt(dx * dx + dy * dy));
+		return distances[sourcePlanet][destinationPlanet];
 	}
 
 	// Sends an order to the game engine. An order is composed of a source
@@ -282,6 +289,43 @@ public class PlanetWars {
 			}
 		}
 		return 1;
+	}
+
+	/**
+	 * Initialize distances map
+	 */
+	private void initDistances() {
+		long t = System.currentTimeMillis();
+
+		int n = numPlanets();
+		distances = new int[n][n];
+
+		// for all source planets...
+		for (int s = 0; s < n; s++) {
+			// for all destination planets...
+			for (int d = s; d < n; d++) {
+				distances[s][d] = calculateDistance(s, d);
+				distances[d][s] = distances[s][d];
+			}
+		}
+
+		MyBot.log("initialized distances in " + (System.currentTimeMillis() - t) + "ms");
+	}
+
+	/**
+	 * Returns the distance between two planets, rounded up to the next highest integer.
+	 * This is the number of discrete time steps it takes to get between the two planets.
+	 * 
+	 * @param sourcePlanet
+	 * @param destinationPlanet
+	 * @return
+	 */
+	private int calculateDistance(int sourcePlanet, int destinationPlanet) {
+		Planet source = planets.get(sourcePlanet);
+		Planet destination = planets.get(destinationPlanet);
+		double dx = source.x - destination.x;
+		double dy = source.y - destination.y;
+		return (int)Math.ceil(Math.sqrt(dx * dx + dy * dy));
 	}
 
 	// Store all the planets and fleets. OMG we wouldn't wanna lose all the
