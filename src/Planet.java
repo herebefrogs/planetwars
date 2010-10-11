@@ -30,6 +30,7 @@ public class Planet implements Cloneable {
 	public int numShips;
 	public int growthRate;
 	public double x, y;
+	public Strategy strategy;
 
 	private Planet (Planet _p) {
 		planetID = _p.planetID;
