@@ -14,10 +14,20 @@ public class PlanetWars {
 	 */
 	private static int[][] distances;
 
-	// Constructs a PlanetWars object instance, given a string containing a
-	// description of a game state.
+	/**
+	 * List of planets
+	 */
+	private final ArrayList<Planet> planets = new ArrayList<Planet>();
+	/**
+	 * List of fleets
+	 */
+	private ArrayList<Fleet> fleets;
+
+	/**
+	 * Update list of planets and fleets from the game state passed in argument
+	 * @param gameStateString
+	 */
 	public PlanetWars(String gameStateString) {
-		planets = new ArrayList<Planet>();
 		fleets = new ArrayList<Fleet>();
 		parseGameState(gameStateString);
 		if (distances == null) {
@@ -239,11 +249,12 @@ public class PlanetWars {
 		return numShips;
 	}
 
-	// Parses a game state from a string. On success, returns 1. On failure,
-	// returns 0.
+	/**
+	 * Parses the game state
+	 * @param s game state
+	 * @return 1 on success, 0 on failure
+	 */
 	private int parseGameState(String s) {
-		planets.clear();
-		fleets.clear();
 		int planetID = 0;
 		String[] lines = s.split("\n");
 		for (int i = 0; i < lines.length; ++i) {
@@ -268,8 +279,19 @@ public class PlanetWars {
 				int owner = Integer.parseInt(tokens[3]);
 				int numShips = Integer.parseInt(tokens[4]);
 				int growthRate = Integer.parseInt(tokens[5]);
-				Planet p = new Planet(planetID++, owner, numShips, growthRate, x, y);
-				planets.add(p);
+				Planet p;
+
+				if (planets.size() == planetID) {
+					// the planet hasn't been added to the list yet
+					p = new Planet(planetID, owner, numShips, growthRate, x, y);
+					planets.add(p);
+				} else {
+					// update planet data (x, y and growth rate won't change between turns)
+					p = planets.get(planetID);
+					p.setOwner(owner);
+					p.setNumShips(numShips);
+				}
+				planetID++;
 				MyBot.log(p.toString());
 			} else if (tokens[0].equals("F")) {
 				if (tokens.length != 7) {
@@ -327,9 +349,4 @@ public class PlanetWars {
 		double dy = source.y - destination.y;
 		return (int)Math.ceil(Math.sqrt(dx * dx + dy * dy));
 	}
-
-	// Store all the planets and fleets. OMG we wouldn't wanna lose all the
-	// planets and fleets, would we!?
-	private ArrayList<Planet> planets;
-	private ArrayList<Fleet> fleets;
 }
