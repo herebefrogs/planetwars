@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class PlanetWarsTest {
+public class IssueOrderTest {
 	MemoryStream ms;
 
 	@Before
@@ -23,7 +23,7 @@ public class PlanetWarsTest {
 	}
 
 	@Test
-	public void issueOrderDontOwnPlanet() throws IOException {
+	public void testDontOwnPlanet() throws IOException {
 		// Enemy planet at (10, 10) with 20 ships stationed and a growth rate of 5 ships per turn
 		// Neutral planet at (15, 15) with 10 ships stationed and a growth rate of 2 ships per turn
 		PlanetWars pw = new PlanetWars("P 10 10 2 20 5\nP 15 15 0 10 2");
@@ -34,7 +34,7 @@ public class PlanetWarsTest {
 	}
 
 	@Test
-	public void issueOrderNotEnoughShipOnPlanet() {
+	public void testNotEnoughShipOnPlanet() {
 		// Allied planet at (10, 10) with 20 ships stationed and a growth rate of 5 ships per turn
 		// Neutral planet at (15, 15) with 10 ships stationed and a growth rate of 2 ships per turn
 		PlanetWars pw = new PlanetWars("P 10 10 1 20 5\nP 15 15 0 10 2");
@@ -45,7 +45,7 @@ public class PlanetWarsTest {
 	}
 
 	@Test
-	public void issueOrderValidOrder() {
+	public void testValidOrder() {
 		// Allied planet at (10, 10) with 20 ships stationed and a growth rate of 5 ships per turn
 		// Neutral planet at (15, 15) with 10 ships stationed and a growth rate of 2 ships per turn
 		PlanetWars pw = new PlanetWars("P 10 10 1 20 5\nP 15 15 0 10 2");

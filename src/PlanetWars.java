@@ -4,6 +4,8 @@
 // this file if you know what you're doing.
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -17,7 +19,7 @@ public class PlanetWars {
 	/**
 	 * List of planets
 	 */
-	private final ArrayList<Planet> planets = new ArrayList<Planet>();
+	private static final ArrayList<Planet> planets = new ArrayList<Planet>();
 	/**
 	 * List of fleets
 	 */
@@ -107,6 +109,62 @@ public class PlanetWars {
 				r.add(p);
 			}
 		}
+		return r;
+	}
+
+	/**
+	 * Return neutral and enemy planets ordered by shortest distance to source planet
+	 * @param s
+	 * @return
+	 */
+	public List<Planet> getClosestTargets(final Planet s) {
+		List<Planet> r = getNotMyPlanets();
+		Collections.sort(r, new Comparator<Planet>() {
+			@Override
+			public int compare(Planet p1, Planet p2) {
+				int d1 = getDistance(s.planetID, p1.planetID);
+				int d2 = getDistance(s.planetID, p2.planetID);
+				return d1 < d2 ? -1 : d1 == d2 ? 0 : 1;
+			}
+		});
+		return r;
+	}
+
+	/**
+	 * Return neutral and enemy planets ordered by smallest number of ships.
+	 * If 2 planets have the same number of ships, the closest to the source planet is returned first
+	 * @param s
+	 * @return
+	 */
+	public List<Planet> getWeakestTargets(final Planet s) {
+		List<Planet> r = getNotMyPlanets();
+		Collections.sort(r, new Comparator<Planet>() {
+			@Override
+			public int compare(Planet p1, Planet p2) {
+				int d1 = getDistance(s.planetID, p1.planetID);
+				int d2 = getDistance(s.planetID, p2.planetID);
+				return p1.numShips < p2.numShips ? -1 : (p1.numShips == p2.numShips ? (d1 < d2 ? -1 : d1 == d2 ? 0 : 1) : 1);
+			}
+		});
+		return r;
+	}
+
+	/**
+	 * Return neutral and enemy planets ordered by highest growth factor.
+	 * If 2 planets have the same growth factor, the closest to the source planet is returned first
+	 * @param s
+	 * @return
+	 */
+	public List<Planet> getFastestGrowthTargets(final Planet s) {
+		List<Planet> r = getNotMyPlanets();
+		Collections.sort(r, new Comparator<Planet>() {
+			@Override
+			public int compare(Planet p1, Planet p2) {
+				int d1 = getDistance(s.planetID, p1.planetID);
+				int d2 = getDistance(s.planetID, p2.planetID);
+				return p1.growthRate > p2.growthRate ? -1 : (p1.growthRate == p2.growthRate ? (d1 < d2 ? -1 : d1 == d2 ? 0 : 1) : 1);
+			}
+		});
 		return r;
 	}
 
@@ -348,5 +406,13 @@ public class PlanetWars {
 		double dx = source.x - destination.x;
 		double dy = source.y - destination.y;
 		return (int)Math.ceil(Math.sqrt(dx * dx + dy * dy));
+	}
+
+	/**
+	 * A way for JUnit tests to clear the distances and planets lists
+	 */
+	static void testsReset() {
+		distances = null;
+		planets.clear();
 	}
 }
