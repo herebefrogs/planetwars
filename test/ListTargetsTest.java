@@ -15,7 +15,7 @@ public class ListTargetsTest {
 	}
 
 	@Test
-	public void testGetClosestTargets() {
+	public void testListClosestNotMyPlanets() {
 		// Allied planet at (0, 0) with 20 ships stationed and a growth rate of 5 ships per turn
 		// Neutral planet at (20, 20) with 10 ships stationed and a growth rate of 2 ships per turn
 		// Enemy planet at (10, 10) with 10 ships stationed and a growth rate of 2 ships per turn
@@ -26,11 +26,11 @@ public class ListTargetsTest {
 		closests.add(pw.getPlanet(2));
 		closests.add(pw.getPlanet(3));
 		closests.add(pw.getPlanet(1));
-		assertTrue("closest planets out of order", closests.equals(pw.getClosestTargets(pw.getPlanet(0))));
+		assertTrue("closest planets out of order", closests.equals(pw.listClosestNotMyPlanets(pw.getPlanet(0))));
 	}
 
 	@Test
-	public void testGetWeakestTargets() {
+	public void testListWeakestNotMyPlanets() {
 		// Allied planet at (0, 0) with 20 ships stationed and a growth rate of 5 ships per turn
 		// Neutral planet at (20, 20) with 50 ships stationed and a growth rate of 2 ships per turn
 		// Enemy planet at (10, 10) with 10 ships stationed and a growth rate of 2 ships per turn
@@ -45,7 +45,7 @@ public class ListTargetsTest {
 		weakests.add(pw.getPlanet(5));
 		weakests.add(pw.getPlanet(3));
 		weakests.add(pw.getPlanet(1));
-		assertTrue("weakests planets out of order", weakests.equals(pw.getWeakestTargets(pw.getPlanet(0))));
+		assertTrue("weakests planets out of order", weakests.equals(pw.listWeakestNotMyPlanets(pw.getPlanet(0))));
 	}
 
 	@Test
@@ -65,7 +65,7 @@ public class ListTargetsTest {
 		fastests.add(pw.getPlanet(3));
 		fastests.add(pw.getPlanet(1));
 
-		assertTrue("fastest growth planets out of order", fastests.equals(pw.getFastestGrowthTargets(pw.getPlanet(0))));
+		assertTrue("fastest growth planets out of order", fastests.equals(pw.listFastestGrowthNotMyPlanets(pw.getPlanet(0))));
 	}
 
 }

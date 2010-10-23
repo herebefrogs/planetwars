@@ -113,21 +113,88 @@ public class PlanetWars {
 	}
 
 	/**
+	 * Order planets by smallest distance
+	 * @author jerome
+	 */
+	private class DistanceComparator implements Comparator<Planet> {
+		private Planet src;
+		DistanceComparator(final Planet src) {
+			this.src = src;
+		}
+		@Override
+		public int compare(Planet p1, Planet p2) {
+			int d1 = getDistance(src.planetID, p1.planetID);
+			int d2 = getDistance(src.planetID, p2.planetID);
+			return d1 < d2 ? -1 : d1 == d2 ? 0 : 1;
+		}
+	}
+	/**
+	 * Order planets by smallest number of ships (then by smallest distance)
+	 * @author jerome
+	 */
+	private class ShipsComparator implements Comparator<Planet> {
+		private Planet src;
+		ShipsComparator(final Planet src) {
+			this.src = src;
+		}
+		@Override
+		public int compare(Planet p1, Planet p2) {
+			int d1 = getDistance(src.planetID, p1.planetID);
+			int d2 = getDistance(src.planetID, p2.planetID);
+			return p1.numShips < p2.numShips ? -1 : (p1.numShips == p2.numShips ? (d1 < d2 ? -1 : d1 == d2 ? 0 : 1) : 1);
+		}
+
+	}
+	/**
+	 * Order planets by fastest growth factor (then by smallest distance)
+	 * @author jerome
+	 */
+	private class GrowthComparator implements Comparator<Planet> {
+		private Planet src;
+		GrowthComparator(final Planet src) {
+			this.src = src;
+		}
+		@Override
+		public int compare(Planet p1, Planet p2) {
+			int d1 = getDistance(src.planetID, p1.planetID);
+			int d2 = getDistance(src.planetID, p2.planetID);
+			return p1.growthRate > p2.growthRate ? -1 : (p1.growthRate == p2.growthRate ? (d1 < d2 ? -1 : d1 == d2 ? 0 : 1) : 1);
+		}
+
+	}
+	/**
+	 * Sort planets according to comparator provided
+	 * @param planets
+	 * @param cmp
+	 * @return
+	 */
+	private List<Planet> sortPlanets(final List<Planet> planets, final Comparator<Planet> cmp) {
+		Collections.sort(planets, cmp);
+		return planets;
+	}
+	/**
 	 * Return neutral and enemy planets ordered by shortest distance to source planet
 	 * @param s
 	 * @return
 	 */
-	public List<Planet> getClosestTargets(final Planet s) {
-		List<Planet> r = getNotMyPlanets();
-		Collections.sort(r, new Comparator<Planet>() {
-			@Override
-			public int compare(Planet p1, Planet p2) {
-				int d1 = getDistance(s.planetID, p1.planetID);
-				int d2 = getDistance(s.planetID, p2.planetID);
-				return d1 < d2 ? -1 : d1 == d2 ? 0 : 1;
-			}
-		});
-		return r;
+	public List<Planet> listClosestNotMyPlanets(final Planet src) {
+		return sortPlanets(getNotMyPlanets(), new DistanceComparator(src));
+	}
+	/**
+	 * Return neutral planets ordered by shortest distance to source planet
+	 * @param s
+	 * @return
+	 */
+	public List<Planet> listClosestNeutralPlanets(final Planet src) {
+		return sortPlanets(getNeutralPlanets(), new DistanceComparator(src));
+	}
+	/**
+	 * Return enemy planets ordered by shortest distance to source planet
+	 * @param s
+	 * @return
+	 */
+	public List<Planet> listClosestEnemyPlanets(final Planet src) {
+		return sortPlanets(getEnemyPlanets(), new DistanceComparator(src));
 	}
 
 	/**
@@ -136,38 +203,54 @@ public class PlanetWars {
 	 * @param s
 	 * @return
 	 */
-	public List<Planet> getWeakestTargets(final Planet s) {
-		List<Planet> r = getNotMyPlanets();
-		Collections.sort(r, new Comparator<Planet>() {
-			@Override
-			public int compare(Planet p1, Planet p2) {
-				int d1 = getDistance(s.planetID, p1.planetID);
-				int d2 = getDistance(s.planetID, p2.planetID);
-				return p1.numShips < p2.numShips ? -1 : (p1.numShips == p2.numShips ? (d1 < d2 ? -1 : d1 == d2 ? 0 : 1) : 1);
-			}
-		});
-		return r;
+	public List<Planet> listWeakestNotMyPlanets(final Planet src) {
+		return sortPlanets(getNotMyPlanets(), new ShipsComparator(src));
 	}
-
+	/**
+	 * Return neutral planets ordered by smallest number of ships.
+	 * If 2 planets have the same number of ships, the closest to the source planet is returned first
+	 * @param s
+	 * @return
+	 */
+	public List<Planet> listWeakestNeutralPlanets(final Planet src) {
+		return sortPlanets(getNeutralPlanets(), new ShipsComparator(src));
+	}
+	/**
+	 * Return enemy planets ordered by smallest number of ships.
+	 * If 2 planets have the same number of ships, the closest to the source planet is returned first
+	 * @param s
+	 * @return
+	 */
+	public List<Planet> listWeakestEnemylPlanets(final Planet src) {
+		return sortPlanets(getEnemyPlanets(), new ShipsComparator(src));
+	}
 	/**
 	 * Return neutral and enemy planets ordered by highest growth factor.
 	 * If 2 planets have the same growth factor, the closest to the source planet is returned first
 	 * @param s
 	 * @return
 	 */
-	public List<Planet> getFastestGrowthTargets(final Planet s) {
-		List<Planet> r = getNotMyPlanets();
-		Collections.sort(r, new Comparator<Planet>() {
-			@Override
-			public int compare(Planet p1, Planet p2) {
-				int d1 = getDistance(s.planetID, p1.planetID);
-				int d2 = getDistance(s.planetID, p2.planetID);
-				return p1.growthRate > p2.growthRate ? -1 : (p1.growthRate == p2.growthRate ? (d1 < d2 ? -1 : d1 == d2 ? 0 : 1) : 1);
-			}
-		});
-		return r;
+	public List<Planet> listFastestGrowthNotMyPlanets(final Planet src) {
+		return sortPlanets(getNotMyPlanets(), new GrowthComparator(src));
 	}
-
+	/**
+	 * Return neutral planets ordered by highest growth factor.
+	 * If 2 planets have the same growth factor, the closest to the source planet is returned first
+	 * @param s
+	 * @return
+	 */
+	public List<Planet> listFastestGrowthNeutralPlanets(final Planet src) {
+		return sortPlanets(getNeutralPlanets(), new GrowthComparator(src));
+	}
+	/**
+	 * Return enemy planets ordered by highest growth factor.
+	 * If 2 planets have the same growth factor, the closest to the source planet is returned first
+	 * @param s
+	 * @return
+	 */
+	public List<Planet> listFastestGrowthEnemyPlanets(final Planet src) {
+		return sortPlanets(getEnemyPlanets(), new GrowthComparator(src));
+	}
 	// Return a list of all the fleets.
 	public List<Fleet> getFleets() {
 		List<Fleet> r = new ArrayList<Fleet>();

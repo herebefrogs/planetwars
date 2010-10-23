@@ -5,7 +5,7 @@ public class AllOutWar implements Strategy {
 
 	@Override
 	public void doTurn(Planet m, PlanetWars pw) {
-		List<Planet> closests = pw.getClosestTargets(m);
+		List<Planet> closests = pw.listClosestNotMyPlanets(m);
 
 		if (!closests.isEmpty()) {
 			Planet c = closests.get(0);
