@@ -425,7 +425,7 @@ public class PlanetWars {
 				if (planets.size() == planetID) {
 					// the planet hasn't been added to the list yet
 					p = new Planet(planetID, owner, numShips, growthRate, x, y);
-					p.strategy = new AllOutWarV2();
+					p.strategy = new AllOutWarV3();
 					planets.add(p);
 				} else {
 					// update planet data (x, y and growth rate won't change between turns)
