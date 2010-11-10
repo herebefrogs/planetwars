@@ -292,17 +292,23 @@ public class PlanetWars {
 		return distances[sourcePlanet][destinationPlanet];
 	}
 
-	// Sends an order to the game engine. An order is composed of a source
-	// planet number, a destination planet number, and a number of ships. A
-	// few things to keep in mind:
-	//   * you can issue many orders per turn if you like.
-	//   * the planets are numbered starting at zero, not one.
-	//   * you must own the source planet. If you break this rule, the game
-	//     engine kicks your bot out of the game instantly.
-	//   * you can't move more ships than are currently on the source planet.
-	//   * the ships will take a few turns to reach their destination. Travel
-	//     is not instant. See the Distance() function for more info.
-	public void issueOrder(int sourcePlanet, int destinationPlanet,	int numShips) {
+	/**
+	 * Sends an order to the game engine. An order is composed of a source
+	 * planet number, a destination planet number, and a number of ships. A
+	 * few things to keep in mind:
+	 * - you can issue many orders per turn if you like.
+	 * - the planets are numbered starting at zero, not one.
+	 * - you must own the source planet. If you break this rule, the game
+	 *   engine kicks your bot out of the game instantly.
+	 *   you can't move more ships than are currently on the source planet.
+	 * - the ships will take a few turns to reach their destination. Travel
+	 *   is not instant. See the Distance() function for more info.
+	 * @param sourcePlanet
+	 * @param destinationPlanet
+	 * @param numShips
+	 * @return true if order is valid & accepted, false otherwise
+	 */
+	public boolean issueOrder(int sourcePlanet, int destinationPlanet,	int numShips) {
 		Planet source = getPlanet(sourcePlanet);
 		if (source.owner != 1) {
 			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": source planet is owned by " + source.owner);
@@ -311,21 +317,28 @@ public class PlanetWars {
 		} else {
 			System.out.println("" + sourcePlanet + " " + destinationPlanet + " " +	numShips);
 			System.out.flush();
+			return true;
 		}
+		return false;
 	}
 
-	// Sends an order to the game engine. An order is composed of a source
-	// planet number, a destination planet number, and a number of ships. A
-	// few things to keep in mind:
-	//   * you can issue many orders per turn if you like.
-	//   * the planets are numbered starting at zero, not one.
-	//   * you must own the source planet. If you break this rule, the game
-	//     engine kicks your bot out of the game instantly.
-	//   * you can't move more ships than are currently on the source planet.
-	//   * the ships will take a few turns to reach their destination. Travel
-	//     is not instant. See the Distance() function for more info.
-	public void issueOrder(Planet source, Planet dest, int numShips) {
-		issueOrder(source.planetID, dest.planetID, numShips);
+	/**
+	 * Sends an order to the game engine. An order is composed of a source
+	 * planet number, a destination planet number, and a number of ships. A
+	 * few things to keep in mind:
+	 * - you can issue many orders per turn if you like.
+	 * - the planets are numbered starting at zero, not one.
+	 * - you must own the source planet. If you break this rule, the game
+	 *   engine kicks your bot out of the game instantly.
+	 * - you can't move more ships than are currently on the source planet.
+	 * - the ships will take a few turns to reach their destination. Travel
+	 *   is not instant. See the Distance() function for more info.	 * @param source
+	 * @param dest
+	 * @param numShips
+	 * @return true if order is valid & accepted, false otherwise
+	 */
+	public boolean issueOrder(Planet source, Planet dest, int numShips) {
+		return issueOrder(source.planetID, dest.planetID, numShips);
 	}
 
 	// Sends the game engine a message to let it know that we're done sending
