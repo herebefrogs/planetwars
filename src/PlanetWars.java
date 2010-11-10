@@ -271,11 +271,39 @@ public class PlanetWars {
 		return r;
 	}
 
+	/**
+	 * Return a list of all my fleets inbound of destination planet
+	 * @return
+	 */
+	public List<Fleet> getMyFleets(Planet p) {
+		List<Fleet> r = new ArrayList<Fleet>();
+		for (Fleet f : fleets) {
+			if (f.destinationPlanet == p.planetID && f.owner == 1) {
+				r.add(f);
+			}
+		}
+		return r;
+	}
+
 	// Return a list of all the fleets owned by enemy players.
 	public List<Fleet> getEnemyFleets() {
 		List<Fleet> r = new ArrayList<Fleet>();
 		for (Fleet f : fleets) {
 			if (f.owner != 1) {
+				r.add(f);
+			}
+		}
+		return r;
+	}
+
+	/**
+	 * Return a list of all the enemy fleets inbound of destination planet
+	 * @return
+	 */
+	public List<Fleet> getEnemyFleets(Planet p) {
+		List<Fleet> r = new ArrayList<Fleet>();
+		for (Fleet f : fleets) {
+			if (f.destinationPlanet == p.planetID && f.owner != 1) {
 				r.add(f);
 			}
 		}
@@ -438,7 +466,6 @@ public class PlanetWars {
 				if (planets.size() == planetID) {
 					// the planet hasn't been added to the list yet
 					p = new Planet(planetID, owner, numShips, growthRate, x, y);
-					p.strategy = new AllOutWarV3();
 					planets.add(p);
 				} else {
 					// update planet data (x, y and growth rate won't change between turns)

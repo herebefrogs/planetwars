@@ -11,6 +11,36 @@ public class MyBot {
 	private static FileWriter debugLog = null;
 
 	public static void doTurn(PlanetWars pw) {
+		// analyze game state
+		for (Planet p : pw.getPlanets()) {
+			// assign a strategy to my planets
+			if (p.owner == 1 && p.strategy == null) {
+				p.strategy = new AllOutWarV3();
+			}
+			// calculate available ships
+			int enemyShips = 0;
+			for (Fleet f : pw.getEnemyFleets(p)) {
+				enemyShips += f.numShips;
+			}
+			int myShips = 0;
+			for (Fleet f : pw.getMyFleets(p)) {
+				myShips += f.numShips;
+			}
+			switch (p.owner) {
+				case 0:
+					p.availableShips = Math.abs(p.numShips - enemyShips) - myShips;
+					break;
+				case 1:
+					p.availableShips = p.numShips + myShips - enemyShips;
+					break;
+				case 2:
+					p.availableShips = p.numShips + enemyShips - myShips;
+					break;
+			}
+			log("P " + p.planetID + " " + p.owner + " " + p.availableShips);
+		}
+
+		// issue orders
 		for (Planet m : pw.getMyPlanets()) {
 			m.strategy.doTurn(m, pw);
 		}

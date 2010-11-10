@@ -23,19 +23,30 @@ public class Planet implements Cloneable {
 
 	public void removeShips(int amount) {
 		numShips -= amount;
+		availableShips -= amount;
 	}
 
 	public int planetID;
 	public int owner;
+	/**
+	 * Number of ships stationed on the planet
+	 */
 	public int numShips;
+	/**
+	 * Number of ships available for departing fleets
+	 * It takes into account numShips and ships from my or enemy incoming fleets
+	 */
+	public int availableShips;
 	public int growthRate;
 	public double x, y;
 	public Strategy strategy;
+
 
 	private Planet (Planet _p) {
 		planetID = _p.planetID;
 		owner = _p.owner;
 		numShips = _p.numShips;
+		availableShips = _p.availableShips;
 		growthRate = _p.growthRate;
 		x = _p.x;
 		y = _p.y;
@@ -48,6 +59,6 @@ public class Planet implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "P " + x + " " + y  + " " + owner + " " + numShips + " " + growthRate + " #" + planetID;
+		return "P " + x + " " + y  + " " + owner + " " + numShips + " " + growthRate + " # " + planetID;
 	}
 }

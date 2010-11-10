@@ -3,7 +3,7 @@
 	<property name="file" value="lefrog" />
 	<property name="map" value="map76.txt" />
 	<property name="player1" value="build/${file}.jar" />
-	<property name="player2" value="lib/example_bots/BullyBot.jar" />
+	<property name="player2" value="lib/example_bots/alloutwar.v3.jar" />
 	<property name="turns" value="199" />
 	
 	
