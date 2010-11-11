@@ -15,7 +15,7 @@ public class MyBot {
 		for (Planet p : pw.getPlanets()) {
 			// assign a strategy to my planets
 			if (p.owner == 1 && p.strategy == null) {
-				p.strategy = new AllOutWarV3();
+				p.strategy = new AllOutWarV4();
 			}
 			// calculate available ships
 			pw.updateAvailableShips(p);

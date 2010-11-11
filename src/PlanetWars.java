@@ -184,6 +184,15 @@ public class PlanetWars {
 		return planets;
 	}
 	/**
+	 * Return all planets ordered by shortest distance to source planet
+	 * @param s
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Planet> listClosestPlanets(final Planet src) {
+		return sortPlanets((List<Planet>) planets.clone(), new DistanceComparator(src));
+	}
+	/**
 	 * Return neutral and enemy planets ordered by shortest distance to source planet
 	 * @param s
 	 * @return
