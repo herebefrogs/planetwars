@@ -12,12 +12,12 @@ public class AllOutWarV3 implements Strategy {
 		while (it.hasNext() && m.numShips > 0) {
 			Planet c = it.next();
 
-			// planet hasn't been captured yet
-			if (c.availableShips >= 0) {
+			// planet hasn't been captured by me yet
+			if (c.futureOwner != 1 && c.availableShips >= 0) {
 				int d = pw.getDistance(m.planetID, c.planetID);
 
 				// calculate the bare minimum of ships to capture the closest planet
-				int ships = c.availableShips + 1 + ((c.owner == 0) ? 0 : d * c.growthRate);
+				int ships = c.availableShips + 1 + ((c.futureOwner == 0) ? 0 : d * c.growthRate);
 
 				// if we have enough ship...
 				if (m.numShips >= ships) {
@@ -25,8 +25,10 @@ public class AllOutWarV3 implements Strategy {
 					if (pw.issueOrder(m, c, ships)) {
 						// account for ships that just left...
 						m.removeShips(ships);
-						// ... and ships that will arrive
-						c.availableShips -= ships;
+						// add my fleet
+						pw.addFleet(m, c, ships);
+						// update available ships for destination planet
+						pw.updateAvailableShips(c);
 					}
 				}
 			}
