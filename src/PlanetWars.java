@@ -565,4 +565,28 @@ public class PlanetWars {
 		distances = null;
 		planets.clear();
 	}
+
+	public void updateAvailableShips(Planet p) {
+		p.availableShips = p.numShips;
+		p.futureOwner = p.owner;
+		int previousFleetTurnsRemaining = 0;
+
+		for (Fleet f : getFleets(p)) {
+			if (p.futureOwner != 0) {
+				// allied or enemy planet produces reinforcements until next fleet arrives
+				p.availableShips += p.growthRate * (f.turnsRemaining - previousFleetTurnsRemaining);
+			}
+			previousFleetTurnsRemaining = f.turnsRemaining;
+
+			// TODO fleets arriving the same turn should be grouped by owner before trying to resolve the conflict
+
+			// if incoming fleet is on same side has planet, add ships otherwise remove them
+			p.availableShips += (f.owner == p.futureOwner) ? f.numShips : -f.numShips;
+
+			// has planet fallen to incoming fleet ?
+			if (p.availableShips < 0) {
+				p.futureOwner = f.owner;
+			}
+		}
+	}
 }
