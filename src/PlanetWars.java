@@ -260,6 +260,32 @@ public class PlanetWars {
 		return r;
 	}
 
+	/**
+	 * Sort fleets by smallest distance to a planet
+	 * @author jerome
+	 */
+	private class DistanceFleetComparator implements Comparator<Fleet> {
+		@Override
+		public int compare(Fleet f1, Fleet f2) {
+			return f1.turnsRemaining < f2.turnsRemaining ? -1 : f1.turnsRemaining == f2.turnsRemaining ? 0 : 1;
+		}
+	}
+	/**
+	 * Return the list of all fleets inbound to destination planet sorted by shortest ETA
+	 * @param p
+	 * @return
+	 */
+	public List<Fleet> getFleets(Planet p) {
+		List<Fleet> r = new ArrayList<Fleet>();
+		for (Fleet f : fleets) {
+			if (f.destinationPlanet == p.planetID) {
+				r.add(f);
+			}
+		}
+		Collections.sort(r, new DistanceFleetComparator());
+		return r;
+	}
+
 	// Return a list of all the fleets owned by the current player.
 	public List<Fleet> getMyFleets() {
 		List<Fleet> r = new ArrayList<Fleet>();
@@ -272,7 +298,7 @@ public class PlanetWars {
 	}
 
 	/**
-	 * Return a list of all my fleets inbound of destination planet
+	 * Return a list of all my fleets inbound to destination planet
 	 * @return
 	 */
 	public List<Fleet> getMyFleets(Planet p) {

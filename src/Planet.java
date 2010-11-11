@@ -3,6 +3,8 @@ public class Planet implements Cloneable {
 	public Planet(int planetID, int owner, int numShips, int growthRate, double x, double y) {
 		this.planetID = planetID;
 		this.owner = owner;
+		this.futureOwner = owner;
+		this.numShips = numShips;
 		this.numShips = numShips;
 		this.growthRate = growthRate;
 		this.x = x;
@@ -27,7 +29,14 @@ public class Planet implements Cloneable {
 	}
 
 	public int planetID;
+	/**
+	 * Current owner of the planet
+	 */
 	public int owner;
+	/**
+	 * Future owner of the planet once all inbound fleets have arrived
+	 */
+	public int futureOwner;
 	/**
 	 * Number of ships stationed on the planet
 	 */
@@ -45,6 +54,7 @@ public class Planet implements Cloneable {
 	private Planet (Planet _p) {
 		planetID = _p.planetID;
 		owner = _p.owner;
+		futureOwner = _p.futureOwner;
 		numShips = _p.numShips;
 		availableShips = _p.availableShips;
 		growthRate = _p.growthRate;

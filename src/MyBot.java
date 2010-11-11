@@ -18,26 +18,18 @@ public class MyBot {
 				p.strategy = new AllOutWarV3();
 			}
 			// calculate available ships
-			int enemyShips = 0;
-			for (Fleet f : pw.getEnemyFleets(p)) {
-				enemyShips += f.numShips;
+			p.availableShips = p.numShips;
+			p.futureOwner = p.owner;
+			for (Fleet f : pw.getFleets(p)) {
+				// if incoming fleet is on same side has planet, add ships
+				// otherwise remove ships
+				p.availableShips += (f.owner == p.futureOwner) ? f.numShips : -f.numShips;
+				// planet has fallen to incoming fleet
+				if (p.availableShips < 0) {
+					p.futureOwner = f.owner;
+				}
 			}
-			int myShips = 0;
-			for (Fleet f : pw.getMyFleets(p)) {
-				myShips += f.numShips;
-			}
-			switch (p.owner) {
-				case 0:
-					p.availableShips = Math.abs(p.numShips - enemyShips) - myShips;
-					break;
-				case 1:
-					p.availableShips = p.numShips + myShips - enemyShips;
-					break;
-				case 2:
-					p.availableShips = p.numShips + enemyShips - myShips;
-					break;
-			}
-			log("P " + p.planetID + " " + p.owner + " " + p.availableShips);
+			log("P " + p.planetID + " " + p.owner + " " + p.futureOwner + " " + p.availableShips);
 		}
 
 		// issue orders
