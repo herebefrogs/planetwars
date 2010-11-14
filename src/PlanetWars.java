@@ -245,6 +245,16 @@ public class PlanetWars {
 		return sortPlanets(getEnemyPlanets(), new ShipsComparator(src));
 	}
 	/**
+	 * Return all planets ordered by highest growth factor.
+	 * If 2 planets have the same growth factor, the closest to the source planet is returned first
+	 * @param s
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Planet> listFastestGrowthPlanets(final Planet src) {
+		return sortPlanets((List<Planet>) planets.clone(), new GrowthComparator(src));
+	}
+	/**
 	 * Return neutral and enemy planets ordered by highest growth factor.
 	 * If 2 planets have the same growth factor, the closest to the source planet is returned first
 	 * @param s
