@@ -15,10 +15,12 @@ public class MyBot {
 		for (Planet p : pw.getPlanets()) {
 			// assign a strategy to my planets
 			if (p.owner == 1 && p.strategy == null) {
-				p.strategy = new AllOutWarV5();
+				p.strategy = new AssimilateV2();
 			}
 			// calculate available ships
 			pw.updateAvailableShips(p);
+
+			AssimilateV2.commonTarget = null;
 
 			log("P " + p.planetID + " " + p.owner + " " + p.futureOwner + " " + p.availableShips);
 		}
