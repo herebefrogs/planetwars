@@ -40,6 +40,10 @@
 		</exec>
 		
 		<echo>${winner}</echo>
+		
+		<exec executable="grep">
+			<arg line="skipping build/debugLog.txt" />
+		</exec>
 
 		<exec executable="java" inputstring="${show.game}">
 			<arg line="-jar lib/ShowGame.jar" />

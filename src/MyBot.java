@@ -21,8 +21,6 @@ public class MyBot {
 			pw.updateAvailableShips(p);
 
 			AssimilateV2.commonTarget = null;
-
-			log("P " + p.planetID + " " + p.owner + " " + p.futureOwner + " " + p.availableShips);
 		}
 
 		// issue orders

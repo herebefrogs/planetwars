@@ -396,11 +396,16 @@ public class PlanetWars {
 		Planet source = getPlanet(sourcePlanet);
 		if (source.owner != 1) {
 			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": source planet is owned by " + source.owner);
+		} else if (numShips <= 0) {
+			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": can't send " + numShips + " ships");
 		} else if (source.numShips < numShips) {
 			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": source planet only have " + source.numShips + " ships");
+		} else if (sourcePlanet == destinationPlanet) {
+			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": destination planet " + destinationPlanet + " is the same as source planet");
 		} else {
 			System.out.println("" + sourcePlanet + " " + destinationPlanet + " " +	numShips);
 			System.out.flush();
+			MyBot.log("F " + sourcePlanet + " " + destinationPlanet + " " + numShips);
 			return true;
 		}
 		return false;
@@ -618,5 +623,7 @@ public class PlanetWars {
 				p.futureOwner = f.owner;
 			}
 		}
+
+		MyBot.log("P " + p.planetID + " " + p.owner + " " + p.futureOwner + " " + p.availableShips);
 	}
 }
