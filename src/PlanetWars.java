@@ -394,21 +394,8 @@ public class PlanetWars {
 	 */
 	public boolean issueOrder(int sourcePlanet, int destinationPlanet,	int numShips) {
 		Planet source = getPlanet(sourcePlanet);
-		if (source.owner != 1) {
-			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": source planet is owned by " + source.owner);
-		} else if (numShips <= 0) {
-			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": can't send " + numShips + " ships");
-		} else if (source.numShips < numShips) {
-			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": source planet only have " + source.numShips + " ships");
-		} else if (sourcePlanet == destinationPlanet) {
-			MyBot.log("skipping order: " + sourcePlanet + " " + destinationPlanet + " " + numShips + ": destination planet " + destinationPlanet + " is the same as source planet");
-		} else {
-			System.out.println("" + sourcePlanet + " " + destinationPlanet + " " +	numShips);
-			System.out.flush();
-			MyBot.log("F " + sourcePlanet + " " + destinationPlanet + " " + numShips);
-			return true;
-		}
-		return false;
+		Planet destination = getPlanet(destinationPlanet);
+		return issueOrder(source, destination, numShips);
 	}
 
 	/**
@@ -422,12 +409,42 @@ public class PlanetWars {
 	 * - you can't move more ships than are currently on the source planet.
 	 * - the ships will take a few turns to reach their destination. Travel
 	 *   is not instant. See the Distance() function for more info.	 * @param source
-	 * @param dest
+	 * @param destination
 	 * @param numShips
 	 * @return true if order is valid & accepted, false otherwise
 	 */
-	public boolean issueOrder(Planet source, Planet dest, int numShips) {
-		return issueOrder(source.planetID, dest.planetID, numShips);
+	public boolean issueOrder(Planet source, Planet destination, int numShips) {
+		// not owner of source planet
+		if (source.owner != 1) {
+			MyBot.log("skipping order: " + source.planetID + " " + destination.planetID + " " + numShips + ": source planet is owned by " + source.owner);
+			// invalid number of ships
+		} else if (numShips <= 0) {
+			MyBot.log("skipping order: " + source.planetID + " " + destination.planetID + " " + numShips + ": can't send " + numShips + " ships");
+			// don't own that many ships
+		} else if (source.numShips < numShips) {
+			MyBot.log("skipping order: " + source.planetID + " " + destination.planetID + " " + numShips + ": source planet only have " + source.numShips + " ships");
+			// sending ships to myself
+		} else if (source.planetID == destination.planetID) {
+			MyBot.log("skipping order: " + source.planetID + " " + destination.planetID + " " + numShips + ": destination planet " + destination.planetID + " is the same as source planet");
+		} else {
+			// send order
+			System.out.println(source.planetID + " " + destination.planetID + " " +	numShips);
+			System.out.flush();
+
+			// log order
+			MyBot.log("F " + source.planetID + " " + destination.planetID + " " + numShips);
+
+			// account for ships that just left...
+			source.removeShips(numShips);
+			// add my fleet
+			addFleet(source, destination, numShips);
+			// update available ships for source & destination planet
+			updateAvailableShips(source);
+			updateAvailableShips(destination);
+
+			return true;
+		}
+		return false;
 	}
 
 	// Sends the game engine a message to let it know that we're done sending
@@ -621,6 +638,8 @@ public class PlanetWars {
 			// has planet fallen to incoming fleet ?
 			if (p.availableShips < 0) {
 				p.futureOwner = f.owner;
+				// what's left now belongs to the new owner
+				p.availableShips = -p.availableShips;
 			}
 		}
 

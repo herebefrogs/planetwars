@@ -25,14 +25,7 @@ public class AssimilateV2 implements Strategy {
 				int ships = Math.min(m.numShips, commonTarget.availableShips + 1 + ((commonTarget.futureOwner == 0) ? 0 : d * commonTarget.growthRate));
 
 				// make it so!
-				if (pw.issueOrder(m, commonTarget, ships)) {
-					// account for ships that just left...
-					m.removeShips(ships);
-					// add my fleet
-					pw.addFleet(m, commonTarget, ships);
-					// update available ships for destination planet
-					pw.updateAvailableShips(commonTarget);
-				}
+				pw.issueOrder(m, commonTarget, ships);
 			}
 		}
 	}

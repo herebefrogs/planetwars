@@ -21,14 +21,7 @@ public class Assimilate implements Strategy {
 				int ships = Math.min(m.numShips, c.availableShips + 1 + ((c.futureOwner == 0) ? 0 : d * c.growthRate));
 
 				// make it so!
-				if (pw.issueOrder(m, c, ships)) {
-					// account for ships that just left...
-					m.removeShips(ships);
-					// add my fleet
-					pw.addFleet(m, c, ships);
-					// update available ships for destination planet
-					pw.updateAvailableShips(c);
-				}
+				pw.issueOrder(m, c, ships);
 			}
 		}
 	}

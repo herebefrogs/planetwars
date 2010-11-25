@@ -25,7 +25,6 @@ public class Planet implements Cloneable {
 
 	public void removeShips(int amount) {
 		numShips -= amount;
-		availableShips -= amount;
 	}
 
 	public int planetID;
