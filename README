@@ -1,0 +1,19 @@
+Pre-requisites
+--------------
+My submissions were developed from the Planet Wars' Java Starter Kit
+therefore you need at least:
+- Java 5+ SDK
+- Ant
+
+How to run a game of Planet Wars?
+---------------------------------
+- just call 'ant' in the root directory
+- the game engine will calculate up to 200 turns,
+  then the game player will animate each turn till the game is won.
+
+How to change the bots?
+-----------------------
+- edit build.xml
+- set property 'player2' to one of the precompiled bots under lib/example_bots/
+- edit src/MyBot.java
+- on line 18, instantiate the class of the desired strategy
